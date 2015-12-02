@@ -78,6 +78,10 @@
         <li>Double-click on the image to start the installation process.</li></ul>
       <p>That's all. XAMPP is now installed below the /Applications/XAMPP directory.</p>
       </dd>
+      <dt>Does XAMPP include MySQL or MariaDB?</dt>
+      <dd>
+        <p>Since XAMPP 5.5.30 and 5.6.14, XAMPP ships MariaDB instead of MySQL. The commands and tools are the same for both.</p>
+      </dd>
       <dt>How do I start XAMPP?</dt>
       <dd>
       <p>To start XAMPP simply open XAMPP Control and start Apache, MySQL and ProFTPD. The name of the XAMPP Control is "manager-osx".</p>      
@@ -91,7 +95,7 @@
       <p>Type in the following URL in a web browser:</p>
       <p><code>http://localhost</code></p>
 
-      <p>Now you should see the XAMPP start page containing some links to check the status of the installed software and some small programming examples.</p>
+      <p>Now you should see the XAMPP start page.</p>
         <img src="/dashboard/images/screenshots/xampp-macosx-start.jpg" />    
       </dd>
       <dt>Is XAMPP production ready?</dt>
@@ -182,6 +186,20 @@ LAMPP: Starting Apache with SSL...</code></p>
       <p>Now the extension should be active.</p>
     </dd>
 
+    <dt>How do I enable access to phpMyAdmin from the outside?</dt>
+    <dd>
+    <p>In the basic configuration of XAMPP, phpMyAdmin is accessible only from the same host that XAMPP is running on, at http://127.0.0.1 or http://localhost.</p>
+    <p>To enable remote access to phpMyAdmin, follow these steps:</p>
+    <ul>
+      <li>Edit the etc/extra/httpd-xampp.conf file in your XAMPP installation directory.</li>
+        <li>Within this file, find the line below and update it to remove 'phpmyadmin' from the list of locations. 
+        <p><code>
+        &lt;LocationMatch "^/(?i:(?:xampp|security|licenses|phpmyadmin|webalizer|server-status|server-info))"&gt;</code></p>
+        </li>
+      <li>Restart the Apache server using the XAMPP control panel.</li>
+    </ul>
+    </dd>
+    
     <dt>How do I backup/restore my XAMPP system?</dt>
     <dd>
       <p><strong>Warning:</strong> The backup and restore functionality is still under development and may not work correctly.</p>

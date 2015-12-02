@@ -78,6 +78,10 @@
         <li>Kattintson duplán a képfájlra a telepítési folyamat indításához.</li></ul>
       <p>Ennyi. A XAMPP most már telepítve van az /Applications/XAMPP könyvtár alá.</p>
       </dd>
+      <dt>Does XAMPP include MySQL or MariaDB?</dt>
+      <dd>
+        <p>Since XAMPP 5.5.30 and 5.6.14, XAMPP ships MariaDB instead of MySQL. The commands and tools are the same for both.</p>
+      </dd>
       <dt>Hogyan indítsam el a XAMPP-ot?</dt>
       <dd>
       <p>A XAMPP indításához egyszerűen nyissa meg a XAMPP vezérlőt és indítsa el az Apache, MySQL és ProFTPD kiszolgálókat. A XAMPP vezérlő neve „manager-osx”.</p>      
@@ -91,7 +95,7 @@
       <p>Gépelje be a következő URL-t a webböngészőbe:</p>
       <p><code>http://localhost</code></p>
 
-      <p>Ekkor látnia kell a XAMPP kezdőlapját, amely tartalmaz néhány hivatkozást a telepített szoftver állapotának ellenőrzéséhez és néhány kisebb programozási példát.</p>
+      <p>Now you should see the XAMPP start page.</p>
         <img src="/dashboard/images/screenshots/xampp-macosx-start.jpg" />    
       </dd>
       <dt>A XAMPP készen áll a munkához?</dt>
@@ -182,6 +186,20 @@ LAMPP: Starting Apache with SSL...</code></p>
       <p>A kiterjesztés most már aktív.</p>
     </dd>
 
+    <dt>How do I enable access to phpMyAdmin from the outside?</dt>
+    <dd>
+    <p>In the basic configuration of XAMPP, phpMyAdmin is accessible only from the same host that XAMPP is running on, at http://127.0.0.1 or http://localhost.</p>
+    <p>To enable remote access to phpMyAdmin, follow these steps:</p>
+    <ul>
+      <li>Edit the etc/extra/httpd-xampp.conf file in your XAMPP installation directory.</li>
+        <li>Within this file, find the line below and update it to remove 'phpmyadmin' from the list of locations. 
+        <p><code>
+        &lt;LocationMatch "^/(?i:(?:xampp|security|licenses|phpmyadmin|webalizer|server-status|server-info))"&gt;</code></p>
+        </li>
+      <li>Restart the Apache server using the XAMPP control panel.</li>
+    </ul>
+    </dd>
+    
     <dt>Hogyan tudok biztonsági mentést és visszaállítást készíteni a XAMPP rendszeremről?</dt>
     <dd>
       <p><strong>Figyelem:</strong> A biztonsági mentés és visszaállítás funkció még fejlesztés alatt van és lehet, hogy nem megfelelően működik.</p>

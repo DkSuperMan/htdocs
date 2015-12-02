@@ -78,6 +78,10 @@
         <li>Дважды кликните по картинке чтобы запустить процесс установки.</li></ul>
       <p>Вот и всё. Теперь XAMPP установлен под каталогом /Applications/XAMPP.</p>
       </dd>
+      <dt>Does XAMPP include MySQL or MariaDB?</dt>
+      <dd>
+        <p>Since XAMPP 5.5.30 and 5.6.14, XAMPP ships MariaDB instead of MySQL. The commands and tools are the same for both.</p>
+      </dd>
       <dt>Как я могу запустить XAMPP?</dt>
       <dd>
       <p>Чтобы запустить XAMPP просто откройте XAMPP Control и запустите Apache, MySQL и ProFTPD. Имя для XAMPP Control "manager-osx".</p>      
@@ -91,7 +95,7 @@
       <p>Введите следующую URL в веб браузер:</p>
       <p><code>http://localhost</code></p>
 
-      <p>Теперь вы должны видить стартовую страницу XAMPP содержащую некоторые ссылки для проверки состояния установленного ПО и небольшие примеры програмирования.</p>
+      <p>Now you should see the XAMPP start page.</p>
         <img src="/dashboard/images/screenshots/xampp-macosx-start.jpg" />    
       </dd>
       <dt>Готов ли XAMPP к производственному использованию?</dt>
@@ -182,6 +186,20 @@ LAMPP: Starting Apache with SSL...</code></p>
       <p>Теперь расширение должо быть активировано.</p>
     </dd>
 
+    <dt>How do I enable access to phpMyAdmin from the outside?</dt>
+    <dd>
+    <p>In the basic configuration of XAMPP, phpMyAdmin is accessible only from the same host that XAMPP is running on, at http://127.0.0.1 or http://localhost.</p>
+    <p>To enable remote access to phpMyAdmin, follow these steps:</p>
+    <ul>
+      <li>Edit the etc/extra/httpd-xampp.conf file in your XAMPP installation directory.</li>
+        <li>Within this file, find the line below and update it to remove 'phpmyadmin' from the list of locations. 
+        <p><code>
+        &lt;LocationMatch "^/(?i:(?:xampp|security|licenses|phpmyadmin|webalizer|server-status|server-info))"&gt;</code></p>
+        </li>
+      <li>Restart the Apache server using the XAMPP control panel.</li>
+    </ul>
+    </dd>
+    
     <dt>Как мне сделать резервное копирование или востановить мою XAMPP систему?</dt>
     <dd>
       <p><strong>Предупреждение:</strong> Функции резервного копирования и востановления ещё разрабатываются и могут работать неправильно.</p>

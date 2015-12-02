@@ -1,26 +1,124 @@
 <?php 
 
-	echo "开始任务";
+	echo "开始测试";
 	echo "<br>";
 	error_reporting(0);
+	$allTaskArray = array();
+	// getTask();
 
-	getTask();
+	$myColumnArr = getTaskColumnId();
 
+	$taskUrlArr = getAllTask($myColumnArr);
 
-	function getTask()
+	saveTaskToDB($taskUrlArr);
+
+	function getTaskColumnId()
 	{
+
 		$post_data = array ('token' => '754971d1eec66bb38176d8c4cedbacd9','uid' => '16772838','page_end' => '10','page_sta' => '1');
 
 		$user_agent = "Mozilla/5.0 (iPhone; iOS 8.3; Scale/2.00)";
 
 		$url_page = "http://zhuan.9766.com/index/neice.php?c=weizhuan&m=api&a=articles_ios";
 
-
 		$jsonContent = curl_string($url_page,$user_agent,$post_data,"223.104.4.121");
 
-		$content = json_decode($jsonContent,true);
+		$content = json_decode($jsonContent);
+		
+		$allColumnArray = array_merge($content->column, $content->columnall); 
 
-		print_r($content);
+		print_r($allColumnArray);
+
+		return $allColumnArray;
+	}
+
+	function getAllTask($columnArray)
+	{
+		echo "<br>";
+		
+		foreach ($columnArray as $valueId) {
+
+			$cidId =  $valueId->cid;
+
+			//每种类型获取多少分页
+			for($i = 1;$i < 2;$i++){
+
+				$post_data = array ('token' => '754971d1eec66bb38176d8c4cedbacd9','uid' => '16772838','cid' => $cidId,'page_end' => '10','page_sta' => $i);
+
+				// print_r($post_data);
+
+				$user_agent = "Mozilla/5.0 (iPhone; iOS 8.3; Scale/2.00)";
+
+				$url_page = "http://zhuan.9766.com/index/neice.php?c=weizhuan&m=api&a=articles_ios";
+
+				$jsonContent = curl_string($url_page,$user_agent,$post_data,"223.104.4.121");
+
+				$content = json_decode($jsonContent);
+
+				$arrContent = $content->arcRows;
+
+				foreach ($arrContent as $singleContent) {
+					$allTaskArray[] = "$singleContent->url&uid=16772838&from=singlemessage&isappinstalled=1";
+				}
+
+				
+				echo "<br>";
+				echo "<br>";
+				echo "<br>";
+				echo "<br>";
+				echo "<br>";
+				echo "sleep start";
+
+				sleep(8);
+
+				echo "<br>";
+				echo "<br>";
+				echo "<br>";
+				echo "<br>";
+				echo "<br>";
+				echo "sleep end";
+
+				
+			}
+
+			break;
+
+		}
+		print_r($allTaskArray);
+		return $allTaskArray;
+	}
+
+	function saveTaskToDB($taskUrlArray)
+	{
+		$con = mysql_connect("localhost","root","");
+		if (!$con){
+		  die('Could not connect: ' . mysql_error());
+		}
+
+
+		if (mysql_query("CREATE DATABASE wzTaskUrl_db",$con))
+		{
+			echo "Database created";
+		}
+		else
+		{
+			echo "Error creating database: " . mysql_error();
+		}
+
+		mysql_select_db("wzTaskUrl_db", $con);
+		$sql = "CREATE TABLE wzTaskUrl_Tab
+		(
+		taskurl text,
+		clickNum int,
+		)";
+		mysql_query($sql,$con);
+
+
+		foreach ($taskUrlArray as $urlValue) {
+			mysql_query("INSERT INTO wzTaskUrl_Tab (taskurl, clickNum) VALUES ('$urlValue', '0')");
+		}
+		
+		mysql_close($con);
 	}
 
 	function startTask()
@@ -71,7 +169,7 @@
 
 
 	echo "<br>";
-	echo "结束任务";
+	echo "结束测试";
 	echo "<br>";
 
 

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Use title if it's in the page YAML frontmatter -->
-    <title>Backup and Restore MySQL Databases</title>
+    <title>Backup and Restore MySQL/MariaDB Databases</title>
 
     
     
@@ -83,14 +83,14 @@
               <li><a href="/dashboard/docs/backup-restore-mysql.html#_using_command_line_tools">Using Command-Line Tools</a></li>
           </ol>
         </aside>
-      <h1>Backup and Restore MySQL Databases</h1>
+      <h1>Backup and Restore MySQL/MariaDB Databases</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>As you use XAMPP, you might find that you need to backup or restore a MySQL database. There are two easy ways to do this with XAMPP: using the browser-based phpMyAdmin tool or using MySQL&#8217;s command-line tools. This guide describes both options.</p>
+<p>As you use XAMPP, you might find that you need to backup or restore a MySQL or MariaDB database. There are two easy ways to do this with XAMPP: using the browser-based phpMyAdmin tool or using MySQL/MariaDB&#8217;s command-line tools. This guide describes both options.</p>
 </div>
 <div class="paragraph">
-<p>This guide assumes that you already have a PHP application that uses a MySQL database deployed on XAMPP. The example application used in this guide is WordPress, although the steps outlined below will work for any application.</p>
+<p>This guide assumes that you already have a PHP application that uses a MySQL/MariaDB database deployed on XAMPP. The example application used in this guide is WordPress, although the steps outlined below will work for any application.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -110,7 +110,7 @@ Remember that you can install WordPress quickly using the <a href="https://bitna
 <h2 id="_using_phpmyadmin">Using phpMyAdmin</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>XAMPP includes <a href="http://www.phpmyadmin.net/">phpMyAdmin</a>, an open-source, browser-based tool for managing MySQL database servers. To backup a MySQL database using phpMyAdmin, follow these steps:</p>
+<p>XAMPP includes <a href="http://www.phpmyadmin.net/">phpMyAdmin</a>, an open-source, browser-based tool for managing MySQL/MariaDB database servers. To backup a MySQL/MariaDB database using phpMyAdmin, follow these steps:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -147,7 +147,7 @@ Remember that you can install WordPress quickly using the <a href="https://bitna
 </div>
 </div>
 <div class="paragraph">
-<p>At a later point, you may wish to restore the database. To restore the data to a fresh MySQL database using phpMyAdmin, follow these steps:</p>
+<p>At a later point, you may wish to restore the database. To restore the data to a fresh MySQL/MariaDB database using phpMyAdmin, follow these steps:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -233,15 +233,15 @@ By default, PHP (and therefore phpMyAdmin) is configured to only accept uploads 
 <h2 id="_using_command_line_tools">Using Command-Line Tools</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>MySQL includes two command-line tools that you can use to quickly backup and restore databases. The <em>mysqldump</em> tool is used to export the contents of a database to a text file, while the <em>mysql</em> client can be used to import data from a text file into a MySQL database.</p>
+<p>MySQL and MariaDB include two command-line tools that you can use to quickly backup and restore databases. The <em>mysqldump</em> tool is used to export the contents of a database to a text file, while the <em>mysql</em> client can be used to import data from a text file into a MySQL/MariaDB database.</p>
 </div>
 <div class="paragraph">
-<p>To backup a MySQL database from the command line, follow these steps:</p>
+<p>To backup a MySQL/MariaDB database from the command line, follow these steps:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Ensure that the MySQL server is running.</p>
+<p>Ensure that the MySQL/MariaDB server is running.</p>
 </li>
 <li>
 <p>Open a new terminal window.</p>
@@ -262,12 +262,12 @@ By default, PHP (and therefore phpMyAdmin) is configured to only accept uploads 
 </ol>
 </div>
 <div class="paragraph">
-<p>At a later point, you may wish to restore the database. To restore the data to a fresh MySQL database from the command line, follow these steps:</p>
+<p>At a later point, you may wish to restore the database. To restore the data to a fresh MySQL/MariaDB database from the command line, follow these steps:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Ensure that the MySQL server is running.</p>
+<p>Ensure that the MySQL/MariaDB server is running.</p>
 </li>
 <li>
 <p>Open a new terminal window.</p>

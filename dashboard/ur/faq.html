@@ -78,6 +78,10 @@
         <li>تنصیب کے عمل کو شروع کرنے کے لئے تصویر پر ڈبل کلک کریں.</li></ul>
       <p>وہ سب ہے. XAMPP کی اب / ایپلی کیشنز / XAMPP کی ڈائریکٹری کے نیچے نصب کیا جاتا ہے.</p>
       </dd>
+      <dt>Does XAMPP include MySQL or MariaDB?</dt>
+      <dd>
+        <p>Since XAMPP 5.5.30 and 5.6.14, XAMPP ships MariaDB instead of MySQL. The commands and tools are the same for both.</p>
+      </dd>
       <dt>میں کس طرح XAMPP کی شروع کروں؟</dt>
       <dd>
       <p>XAMPP کی شروع کرنے کے لئے صرف XAMPP کی کنٹرول کھولنے اور Apache، MySQL اور ProFTPD شروع. XAMPP کی کنٹرول نام "مینیجر OSX" ہے.</p>      
@@ -91,7 +95,7 @@
       <p>ایک ویب براؤزر میں مندرجہ ذیل یو آر ایل میں ٹائپ کریں:</p>
       <p><code>http://localhost</code></p>
 
-      <p>اب آپ نصب سافٹ ویئر کی حیثیت اور کچھ چھوٹے پروگرامنگ کی مثالیں چیک کرنے کے لئے کچھ لنکس پر مشتمل XAMPP کی شروع کے صفحے کو دیکھنا چاہئے.</p>
+      <p>Now you should see the XAMPP start page.</p>
         <img src="/dashboard/images/screenshots/xampp-macosx-start.jpg" />    
       </dd>
       <dt>XAMPP کی پیداوار تیار ہے؟</dt>
@@ -182,6 +186,20 @@ LAMPP: Starting Apache with SSL...</code></p>
       <p>اب توسیع فعال ہونا چاہئے.</p>
     </dd>
 
+    <dt>How do I enable access to phpMyAdmin from the outside?</dt>
+    <dd>
+    <p>In the basic configuration of XAMPP, phpMyAdmin is accessible only from the same host that XAMPP is running on, at http://127.0.0.1 or http://localhost.</p>
+    <p>To enable remote access to phpMyAdmin, follow these steps:</p>
+    <ul>
+      <li>Edit the etc/extra/httpd-xampp.conf file in your XAMPP installation directory.</li>
+        <li>Within this file, find the line below and update it to remove 'phpmyadmin' from the list of locations. 
+        <p><code>
+        &lt;LocationMatch "^/(?i:(?:xampp|security|licenses|phpmyadmin|webalizer|server-status|server-info))"&gt;</code></p>
+        </li>
+      <li>Restart the Apache server using the XAMPP control panel.</li>
+    </ul>
+    </dd>
+    
     <dt>میں کس طرح بیک اپ / میرے XAMPP کی نظام بحال کروں؟</dt>
     <dd>
       <p><strong>تنبیہ:</strong> بیک اپ اور فعالیت کو بحال ترقی کے تحت اب بھی ہے اور درست طریقے سے کام نہیں کر سکتے.</p>

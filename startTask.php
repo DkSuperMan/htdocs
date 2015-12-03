@@ -7,6 +7,26 @@
 	error_reporting(0);
 	$allTaskArray = array();
 
+
+	$mobileArray = array("223.104.4.","117.136.0.","117.136.1.","218.204.177.","117.131.19.","211.140.0.");
+
+	$wifiArray = array("218.94.121.","114.240.0.","221.239.16.","220.198.192.","202.96.224.","218.75.35.");
+
+
+	$userAgentArray = array("Mozilla/5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H143 MicroMessenger/6.3.7 NetType/WIFI Language/zh_CN",
+		"Mozilla/5.0 (iPhone; CPU iPhone OS 8_3 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H143 MicroMessenger/6.3.7 NetType/3G+ Language/zh_CN",
+		"Mozilla/5.0 (iPad; CPU OS 8_3 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12F69 MicroMessenger/6.3.5 NetType/WIFI Language/zh_CN",
+		"Mozilla/5.0 (Linux; U; Android 4.4.4; zh-cn; SAMSUNG Build/KTU86P) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30",
+		"Mozilla/5.0 (Linux; U; Android 4.4.2; zh-CN; SAMSUNG Build/KTU84P) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 UCBrowser/10.1.0.527 U3/0.8.0 Mobile Safari/534.30",
+		"Mozilla/5.0 (Linux; U; Android 5.0; zh-cn; GT-S5660 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 MicroMessenger/4.5.255",
+		"Mozilla/5.0 (Linux; U; Android 4.2.2; zh-cn; 2015011 Build/HM2014011) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30 MicroMessenger/6.0.0.50_r844973.501 NetType/3G+",
+		"Mozilla/5.0 (Linux; U; Android 5.1; zh-cn; 2014011 Build/HM2014011) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30 MicroMessenger/6.0.0.50_r844973.501 NetType/WIFI",
+		"Mozilla/5.0 (iPhone; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12F69 MicroMessenger/6.3.5 NetType/3G+ Language/zh_CN",
+		"Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12F69 MicroMessenger/6.3.5 NetType/WIFI Language/zh_CN",
+		"Mozilla/5.0 (iPad; CPU OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12F69 MicroMessenger/6.3.5 NetType/WIFI Language/zh_CN");
+
+	
+
 	// $myColumnArr = getTaskColumnId();
 
 	// $taskUrlArr = getAllTask($myColumnArr);
@@ -14,18 +34,102 @@
 	// saveTaskToDB($taskUrlArr);
 
 
-	// $willStartTaskArr = getNotCompleteTask();
+
+	$willStartTaskArr = getNotCompleteTask();
 	// printf($willStartTaskArr);
-	// startTask($willStartTaskArr);
 
-	$url = 'http://www.artcm.cn/customer/login/';
+	create_taskip_table();
+	startTask($willStartTaskArr);
 
-	$password = "I2brxrF\/FFvKsNr+JnMAoKhyxYZSHWp5P2B8kmzWvZZBM6M3NzVEe997pamXfozLTxExFq80xeLtb++uj6+THg8mhEiiTO+7EBCCsM+V1NsFBjYuck1tAbB20ypO8L1K9Mw70Ey8QRA9n2v9YqY2MBOx1Rn5yv+zOhSFnSiP3eg=";
+	// $url = 'http://www.artcm.cn/customer/login/';
 
-	$user_agent = "Mozilla/5.0 (iPhone; iOS 8.3; Scale/2.00)";
-	$test_post_data = array('username' => '13814057793', 'password' => $password);
+	// $password = "I2brxrF\/FFvKsNr+JnMAoKhyxYZSHWp5P2B8kmzWvZZBM6M3NzVEe997pamXfozLTxExFq80xeLtb++uj6+THg8mhEiiTO+7EBCCsM+V1NsFBjYuck1tAbB20ypO8L1K9Mw70Ey8QRA9n2v9YqY2MBOx1Rn5yv+zOhSFnSiP3eg=";
 
-	test_Cookie($url,$test_post_data,$user_agent);
+	// $user_agent = "Mozilla/5.0 (iPhone; iOS 8.3; Scale/2.00)";
+	// $test_post_data = array('username' => '13814057793', 'password' => $password);
+
+	// test_Cookie($url,$test_post_data,$user_agent);
+
+	
+
+
+
+	function get_task_ip_Array(){
+
+		$taskIpArray = array();
+
+		Global $mobileArray,$wifiArray;
+
+		for ($i=0; $i < count($mobileArray); $i++) {
+
+			$tempArray = getRandIp($mobileArray[$i],50);
+
+			for ($j=0; $j < count($tempArray); $j++) {
+				
+				$taskIpArray[] = $tempArray[$j];
+			}
+
+		}
+
+
+		for ($i=0; $i < count($wifiArray); $i++) {
+
+			$tempArray = getRandIp($wifiArray[$i],50);
+
+			for ($j=0; $j < count($tempArray); $j++) {
+				
+				$taskIpArray[] = $tempArray[$j];
+			}
+
+		}
+
+		// var_dump($taskIpArray);
+		return $taskIpArray;
+	}
+
+	function create_taskip_table(){
+
+		$con = mysql_connect("localhost","root","");
+		if (!$con){
+		  die('Could not connect: ' . mysql_error());
+		}
+
+		mysql_query("CREATE DATABASE wzTaskUrl_db",$con);
+
+		mysql_select_db("wzTaskUrl_db", $con);
+		$sql = "CREATE TABLE wzTaskip_Tab 
+		(
+		TaskIp varchar(50),
+		IpCookieAid varchar(255),
+		)";
+		mysql_query($sql,$con);
+		
+		mysql_close($con);
+
+	}
+
+	function query_taskip_cookie($ipAddr){
+
+		$con = mysql_connect("localhost","root","");
+		if (!$con){
+		  die('Could not connect: ' . mysql_error());
+		}
+
+		mysql_select_db("wzTaskUrl_db", $con);
+
+		$result = mysql_query("SELECT * FROM wzTaskip_Tab WHERE TaskIp = $ipAddr");
+
+		echo "<br>";
+
+		mysql_close($con);
+
+		if(mysql_num_rows($result))
+		{
+			return true;
+		}
+		return false;
+		
+	}
 
 	function test_Cookie($url,$test_post_data,$user_agent){
 
@@ -40,8 +144,9 @@
 		// 抓包 end
 
 		curl_setopt ($ch, CURLOPT_USERAGENT, $user_agent);
-		$cookie_jar = dirname(__FILE__)."/pic.cookie";
-
+		$cookie_jar = dirname(__FILE__)."/cookies/pic.cookie";
+		echo "$cookie_jar";
+		echo "<br>";
 		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_jar);
 		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_jar);
 		curl_setopt ($ch, CURLOPT_HEADER, 1);
@@ -96,7 +201,7 @@
 		return $result;
 	}
 
-	function curl_getHtml_string ($url,$user_agent,$cheatip){
+	function curl_getHtml_string ($url,$user_agent,$cheatip,$cookieFile){
 
 		$ch = curl_init();
 		print_r($cheatip);
@@ -109,6 +214,12 @@
 		curl_setopt($ch, CURLOPT_PROXY, "127.0.0.1");
 		curl_setopt($ch, CURLOPT_PROXYPORT, 8888);
 		// 抓包 end
+
+
+		$cookie_jar = dirname(__FILE__)."/cookies/$cookieFile";
+		
+		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_jar);
+		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_jar);
 
 		curl_setopt ($ch, CURLOPT_USERAGENT, $user_agent);
 
@@ -125,7 +236,9 @@
 		return $result;
 	}
 
-	function curl_get_task_string ($url,$user_agent,$referer,$cheatip){
+	function curl_get_task_string ($url,$user_agent,$referer,$cheatip,$cookieFile){
+
+		echo "$cookieFile"."<br>";
 
 		$ch = curl_init();
 		echo "<br>";
@@ -136,6 +249,11 @@
 		curl_setopt($ch, CURLOPT_PROXY, "127.0.0.1");
 		curl_setopt($ch, CURLOPT_PROXYPORT, 8888);
 		// 抓包 end
+
+		$cookie_jar = dirname(__FILE__)."/cookies/$cookieFile";
+		
+		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_jar);
+		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_jar);
 
 		curl_setopt ($ch, CURLOPT_USERAGENT, $user_agent);
 		curl_setopt ($ch, CURLOPT_HTTPHEADER, array("Referer:$referer", "CLIENT-IP:$cheatip", "X-FORWARDED-FOR:$cheatip"));  //此处可以改为任意假IP
@@ -172,20 +290,22 @@
 	}
 
 
-	function getRandIp ($ipType){
+	function getRandIp ($ipAddr,$num){
 
 		//range 是将1到100 列成一个数组 
 		$numbers = range (0,255); 
 		//shuffle 将数组顺序随即打乱 
 		shuffle ($numbers); 
 		//array_slice 取该数组中的某一段 
-		$no=30; 
-		$result = array_slice($numbers,0,$no); 
-		for ($i=0;$i<$no;$i++){ 
-			echo $result[$i]."<br>"; 
+		$result = array_slice($numbers,0,$num);
+
+		$ipAddrArray = array();
+		for ($i=0;$i<$num;$i++){
+
+			$ipAddrArray[] = $ipAddr.$result[$i];
 		} 
 
-		return $result;
+		return $ipAddrArray;
 	}
 
 	function getTaskColumnId()
@@ -338,41 +458,94 @@
 	function startTask($taskArr)
 	{
 
+
 		//从未完成的任务中抽取6个准备开始做任务
 		shuffle ($taskArr); 
-		$result = array_slice($taskArr,0,6); 
+		$result = array_slice($taskArr,0,1);
 		echo "<br>";
 
 		$tempArray = array();
 
-		for ($i=0;$i<6;$i++){
+		for ($i=0;$i<1;$i++){
 
 			$item =  $result[$i];
 
 			$tempArray[] = $item;
-			// echo $item['Taskurl']."<br>";
+			echo $item['Taskurl']."<br>";
+		}
+
+		$taskipArray =  get_task_ip_Array();
+
+		Global $userAgentArray;
+
+		// for ($i=0; $i < count($taskipArray); $i++) { 
+			
+		for ($i=0; $i < 5; $i++) {
+
+			shuffle ($userAgentArray); 
+			$randUserAgent = array_slice($userAgentArray,0,1);
+
+			// echo $result."<br>";
+
+			// var_dump($result);
+
+			// print_r($);
+
+			echo "<br>";
+
+
+
+
+			$tempurl =  $tempArray[$i]['Taskurl'];
+			$aid =  $tempArray[$i]['Aid'];
+			$user_agent = $randUserAgent[0];
+			$jsonpTime = 'jsonp'. getMillisecond();
+
+			$tempTaskIP = $taskipArray[$i];
+
+			echo "$tempTaskIP"."<br>";
+
+			// $tempTaskIP = "223.104.4.227";
+			//每个ip就一个cookie
+
+			//get原始页面
+			$htmlContent = curl_getHtml_string($tempurl,$user_agent,$tempTaskIP,$tempTaskIP.".".md5($tempurl));
+
+			ob_flush();
+
+			flush();
+
+			sleep(1);
+			// echo "$htmlContent";
+			//获取重定向url
+		    $obj = new RedirectUrl("http://b.weizhuanlianmeng.com/ddb/?aid=$aid&platform=1&is_app=1&uid=16772838&from=singlemessage&isappinstalled=1");
+		    $realurl = $obj->get_final_url();
+
+		    //get重定向的url
+		    $htmlContent = curl_getHtml_string($realurl,$user_agent,$tempTaskIP,$tempTaskIP.".".md5($realurl));
+
+		    sleep(2);
+		    // echo "$htmlContent";
+
+		   
+
+		    // $content = curl_get_task_string("http://b.weizhuanlianmeng.com/acc/?callback=$jsonpTime&aid=$aid&uid=16772838",$user_agent,$realurl,$tempTaskIP,$tempTaskIP.".cookie");
+		    // sleep(5);
+		    // if(!query_taskip_cookie($taskipArray[$i])){
+
+
+		   	// }
+
+			// print_r($content);
+
+			// break;
+
+			echo "1111111111111111111"."<br>";
+
 		}
 
 
-		$tempurl =  $tempArray[0]['Taskurl'];
-		$aid =  $tempArray[0]['Aid'];
-		$user_agent = "Mozilla/5.0 (iPhone; iOS 8.3; Scale/2.00)";
-		$jsonpTime = 'jsonp'. getMillisecond();
-
-		//get原始页面
-		$htmlContent = curl_getHtml_string($tempurl,$user_agent,"223.104.4.213");
-		echo "$htmlContent";
-		//获取重定向url
-	    $obj = new RedirectUrl("http://b.weizhuanlianmeng.com/ddb/?aid=$aid&platform=1&is_app=1&uid=16772838&from=singlemessage&isappinstalled=1");
-	    $realurl = $obj->get_final_url();
-
-	    //get重定向的url
-	    $htmlContent = curl_getHtml_string($realurl,$user_agent,"223.104.4.213");
-
-	    echo "$htmlContent";
-
-	    $content = curl_get_task_string("http://b.weizhuanlianmeng.com/acc/?callback=$jsonpTime&aid=$aid&uid=16772838",$user_agent,$realurl,"223.104.4.213");
-		print_r($content);
+		
 
 	}
 

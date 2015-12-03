@@ -1,12 +1,11 @@
 <?php 
+	
+	require_once("redirectUrl.php");
 
 	echo "开始测试";
 	echo "<br>";
 	error_reporting(0);
 	$allTaskArray = array();
-
-	
-	// getTask();
 
 	// $myColumnArr = getTaskColumnId();
 
@@ -16,11 +15,12 @@
 
 
 	$willStartTaskArr = getNotCompleteTask();
-
-	
-
+	printf($willStartTaskArr);
 	startTask($willStartTaskArr);
 
+	echo "<br>";
+	echo "结束测试";
+	echo "<br>";
 
 	function curl_post_string ($url,$user_agent,$post_data,$cheatip){
 
@@ -56,7 +56,7 @@
 		return $result;
 	}
 
-	function curl_getHtml_string ($url,$user_agent,$post_data,$cheatip){
+	function curl_getHtml_string ($url,$user_agent,$cheatip){
 
 		$ch = curl_init();
 		print_r($cheatip);
@@ -71,7 +71,8 @@
 		// 抓包 end
 
 		curl_setopt ($ch, CURLOPT_USERAGENT, $user_agent);
-		curl_setopt ($ch, CURLOPT_HTTPHEADER, array('Content-Type' => 'application/json; charset=utf-8', "CLIENT-IP:$cheatip", "X-FORWARDED-FOR:$cheatip"));  //此处可以改为任意假IP
+
+		curl_setopt ($ch, CURLOPT_HTTPHEADER, array('Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', "CLIENT-IP:$cheatip", "X-FORWARDED-FOR:$cheatip"));  //此处可以改为任意假IP
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt ($ch, CURLOPT_TIMEOUT, 30);
@@ -84,11 +85,9 @@
 		return $result;
 	}
 
-	function curl_get_string ($url,$user_agent,$post_data,$cheatip){
+	function curl_get_task_string ($url,$user_agent,$referer,$cheatip){
 
 		$ch = curl_init();
-		print_r($cheatip);
-
 		echo "<br>";
 
 		curl_setopt ($ch, CURLOPT_URL, $url);
@@ -99,7 +98,7 @@
 		// 抓包 end
 
 		curl_setopt ($ch, CURLOPT_USERAGENT, $user_agent);
-		curl_setopt ($ch, CURLOPT_HTTPHEADER, array('Content-Type' => 'application/json; charset=utf-8', "CLIENT-IP:$cheatip", "X-FORWARDED-FOR:$cheatip"));  //此处可以改为任意假IP
+		curl_setopt ($ch, CURLOPT_HTTPHEADER, array("Referer:$referer", "CLIENT-IP:$cheatip", "X-FORWARDED-FOR:$cheatip"));  //此处可以改为任意假IP
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt ($ch, CURLOPT_TIMEOUT, 30);
@@ -299,56 +298,50 @@
 	function startTask($taskArr)
 	{
 
-		// //从未完成的任务中抽取6个准备开始做任务
-		// shuffle ($taskArr); 
-		// $result = array_slice($taskArr,0,6); 
-		// echo "<br>";
+		//从未完成的任务中抽取6个准备开始做任务
+		shuffle ($taskArr); 
+		$result = array_slice($taskArr,0,6); 
+		echo "<br>";
 
-		// $tempArray = array();
+		$tempArray = array();
 
-		// for ($i=0;$i<6;$i++){
+		for ($i=0;$i<6;$i++){
 
-		// 	$item =  $result[$i];
+			$item =  $result[$i];
 
-		// 	$tempArray[] = $item;
-		// 	// echo $item['Taskurl']."<br>";
-		// }
+			$tempArray[] = $item;
+			// echo $item['Taskurl']."<br>";
+		}
 
 
-		// $tempurl =  $tempArray[0]['Taskurl'];
+		$tempurl =  $tempArray[0]['Taskurl'];
+		$aid =  $tempArray[0]['Aid'];
+		$user_agent = "Mozilla/5.0 (iPhone; iOS 8.3; Scale/2.00)";
+		$jsonpTime = 'jsonp'. getMillisecond();
 
-		// echo "$tempurl";
+		//get原始页面
+		$htmlContent = curl_getHtml_string($tempurl,$user_agent,"223.104.4.213");
+		echo "$htmlContent";
+		//获取重定向url
+	    $obj = new RedirectUrl("http://b.weizhuanlianmeng.com/ddb/?aid=$aid&platform=1&is_app=1&uid=16772838&from=singlemessage&isappinstalled=1");
+	    $realurl = $obj->get_final_url();
 
-		$user_agent = "Mozilla/5.0 (iPhone; iOS 8.4; Scale/2.00)";
-		$content = curl_get_string("http://b.weizhuanlianmeng.com/acc/?callback=jsonp1449074689196&aid=32338&uid=16772838",$user_agent,"223.104.4.221");
+	    //get重定向的url
+	    $htmlContent = curl_getHtml_string($realurl,$user_agent,"223.104.4.213");
+
+	    echo "$htmlContent";
+
+	    $content = curl_get_task_string("http://b.weizhuanlianmeng.com/acc/?callback=$jsonpTime&aid=$aid&uid=16772838",$user_agent,$realurl,"223.104.4.213");
 		print_r($content);
 
-
-		// http://b.weizhuanlianmeng.com/acc/?callback=jsonp1449074417976&aid=32355&uid=16772838
-
-		// http://www.yhtbz.com/weizhuan/2/32167.html?platform=1&is_app=1&uid=16772838&from=singlemessage&isappinstalled=1
-
-		// http://b.weizhuanlianmeng.com/acc/?callback=jsonp1449075094431&aid=32338&uid=16772838
-		// http://b.weizhuanlianmeng.com/acc/?callback=jsonp1449074689196&aid=32338&uid=16772838
 	}
 
+	//获取毫秒
+	function getMillisecond() {
 
-	
-
-	// $url_page = "http://localhost/getip.php";
-	// $user_agent = "Mozilla/5.0 (iPhone; iOS 8.3; Scale/2.00)";
-	// // $proxy = "http://115.148.25.187:9000";    //此处为代理服务器IP和PORT高级匿名代理
-	// $string = curl_post_string($url_page,$user_agent,$proxy);
-	// echo $string;
-
-
-	echo "<br>";
-	echo "结束测试";
-	echo "<br>";
-
-
-	
-
-	
-
+		list($t1, $t2) = explode(' ', microtime());
+		return (float)sprintf('%.0f',(floatval($t1)+floatval($t2))*1000);
+	}
 ?>
+
+

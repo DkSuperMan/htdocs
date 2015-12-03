@@ -1,11 +1,11 @@
-<?php
-	if (!empty($_SERVER['HTTPS']) && ('on' == $_SERVER['HTTPS'])) {
-		$uri = 'https://';
-	} else {
-		$uri = 'http://';
-	}
-	$uri .= $_SERVER['HTTP_HOST'];
-	header('Location: '.$uri.'/dashboard/');
-	exit;
-?>
-Something is wrong with the XAMPP installation :-(
+<html>
+	<body>
+
+	<form action="verify.php" method="get">
+		User:<input type="text" name="name"><br>
+		<input type="submit">
+	</form>
+
+	</body>
+</html>
+

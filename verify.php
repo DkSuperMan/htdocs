@@ -7,7 +7,8 @@
 
 	if($name == "111111"){
 		echo "name is $name";
-		header('Location: HandleTask.php');
+		// header('Location: redirectUrl.php');
+		header('Location: startTask.php');
 	}else{
 		echo "userName error!";
 	}

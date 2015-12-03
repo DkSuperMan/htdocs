@@ -14,9 +14,52 @@
 	// saveTaskToDB($taskUrlArr);
 
 
-	$willStartTaskArr = getNotCompleteTask();
-	printf($willStartTaskArr);
-	startTask($willStartTaskArr);
+	// $willStartTaskArr = getNotCompleteTask();
+	// printf($willStartTaskArr);
+	// startTask($willStartTaskArr);
+
+	$url = 'http://www.artcm.cn/customer/login/';
+
+	$password = "I2brxrF\/FFvKsNr+JnMAoKhyxYZSHWp5P2B8kmzWvZZBM6M3NzVEe997pamXfozLTxExFq80xeLtb++uj6+THg8mhEiiTO+7EBCCsM+V1NsFBjYuck1tAbB20ypO8L1K9Mw70Ey8QRA9n2v9YqY2MBOx1Rn5yv+zOhSFnSiP3eg=";
+
+	$user_agent = "Mozilla/5.0 (iPhone; iOS 8.3; Scale/2.00)";
+	$test_post_data = array('username' => '13814057793', 'password' => $password);
+
+	test_Cookie($url,$test_post_data,$user_agent);
+
+	function test_Cookie($url,$test_post_data,$user_agent){
+
+		$ch = curl_init();
+		echo "<br>";
+		curl_setopt ($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, stripslashes(json_encode($test_post_data))); 
+
+		// 抓包 start
+		curl_setopt($ch, CURLOPT_PROXY, "127.0.0.1");
+		curl_setopt($ch, CURLOPT_PROXYPORT, 8888);
+		// 抓包 end
+
+		curl_setopt ($ch, CURLOPT_USERAGENT, $user_agent);
+		$cookie_jar = dirname(__FILE__)."/pic.cookie";
+
+		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_jar);
+		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_jar);
+		curl_setopt ($ch, CURLOPT_HEADER, 1);
+		curl_setopt ($ch, CURLOPT_POST, 1);
+		curl_setopt ($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json','Client-Agent:device:iPhone;os:iOS8.4;version:1.0.0'));  //此处可以改为任意假IP
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt ($ch, CURLOPT_TIMEOUT, 30);
+
+		curl_exec ($ch);
+
+		$result = curl_multi_getcontent($ch);
+
+		printf($result);
+
+		curl_close($ch);
+
+	}
 
 	echo "<br>";
 	echo "结束测试";
@@ -25,10 +68,7 @@
 	function curl_post_string ($url,$user_agent,$post_data,$cheatip){
 
 		$ch = curl_init();
-		print_r($cheatip);
-
 		echo "<br>";
-
 		curl_setopt ($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post_data)); 
 

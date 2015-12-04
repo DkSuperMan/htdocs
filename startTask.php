@@ -2,6 +2,10 @@
 	
 	require_once("redirectUrl.php");
 
+	require_once("thread.php");
+
+
+
 	echo "开始测试";
 	echo "<br>";
 	error_reporting(0);
@@ -25,18 +29,16 @@
 		"Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12F69 MicroMessenger/6.3.5 NetType/WIFI Language/zh_CN",
 		"Mozilla/5.0 (iPad; CPU OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12F69 MicroMessenger/6.3.5 NetType/WIFI Language/zh_CN");
 
-	
+	$myColumnArr = getTaskColumnId();
 
-	// $myColumnArr = getTaskColumnId();
+	$taskUrlArr = getAllTask($myColumnArr);
 
-	// $taskUrlArr = getAllTask($myColumnArr);
-
-	// saveTaskToDB($taskUrlArr);
+	saveTaskToDB($taskUrlArr);
 
 
 
 	$willStartTaskArr = getNotCompleteTask();
-	// printf($willStartTaskArr);
+	// // printf($willStartTaskArr);
 
 	create_taskip_table();
 	startTask($willStartTaskArr);
@@ -204,7 +206,7 @@
 	function curl_getHtml_string ($url,$user_agent,$cheatip,$cookieFile){
 
 		$ch = curl_init();
-		print_r($cheatip);
+		// print_r($cheatip);
 
 		echo "<br>";
 
@@ -215,11 +217,14 @@
 		curl_setopt($ch, CURLOPT_PROXYPORT, 8888);
 		// 抓包 end
 
+		if($cookieFile){
 
-		$cookie_jar = dirname(__FILE__)."/cookies/$cookieFile";
+			$cookie_jar = dirname(__FILE__)."/cookies/$cookieFile";
+			
+			curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_jar);
+			curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_jar);
+		}
 		
-		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_jar);
-		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_jar);
 
 		curl_setopt ($ch, CURLOPT_USERAGENT, $user_agent);
 
@@ -323,7 +328,7 @@
 		
 		$allColumnArray = array_merge($content->column, $content->columnall); 
 
-		print_r($allColumnArray);
+		// print_r($allColumnArray);
 
 		return $allColumnArray;
 	}
@@ -460,17 +465,22 @@
 
 
 		//从未完成的任务中抽取6个准备开始做任务
+
+		$numTask = 5;
+
+		$numTaskClick = 100;
+
 		shuffle ($taskArr); 
-		$result = array_slice($taskArr,0,1);
+		$result = array_slice($taskArr,0,$numTask);
 		echo "<br>";
 
-		$tempArray = array();
+		$tempTaskArray = array();
 
-		for ($i=0;$i<1;$i++){
+		for ($i=0;$i<$numTask;$i++){
 
 			$item =  $result[$i];
 
-			$tempArray[] = $item;
+			$tempTaskArray[] = $item;
 			echo $item['Taskurl']."<br>";
 		}
 
@@ -478,44 +488,30 @@
 
 		Global $userAgentArray;
 
-		// for ($i=0; $i < count($taskipArray); $i++) { 
-			
 		for ($i=0; $i < 5; $i++) {
+			
+		// for ($i=0; $i < $numTaskClick; $i++) {
 
 			shuffle ($userAgentArray); 
 			$randUserAgent = array_slice($userAgentArray,0,1);
 
-			// echo $result."<br>";
 
-			// var_dump($result);
+			shuffle ($tempTaskArray); 
+			$randTask = array_slice($tempTaskArray,0,1);
 
-			// print_r($);
-
-			echo "<br>";
-
-
-
-
-			$tempurl =  $tempArray[$i]['Taskurl'];
-			$aid =  $tempArray[$i]['Aid'];
+			$tempurl =  $randTask[0]['Taskurl'];
+			$aid =  $randTask[0]['Aid'];
 			$user_agent = $randUserAgent[0];
 			$jsonpTime = 'jsonp'. getMillisecond();
 
 			$tempTaskIP = $taskipArray[$i];
 
-			echo "$tempTaskIP"."<br>";
-
 			// $tempTaskIP = "223.104.4.227";
 			//每个ip就一个cookie
-
 			//get原始页面
 			$htmlContent = curl_getHtml_string($tempurl,$user_agent,$tempTaskIP,$tempTaskIP.".".md5($tempurl));
 
-			ob_flush();
-
-			flush();
-
-			sleep(1);
+			sleep(2);
 			// echo "$htmlContent";
 			//获取重定向url
 		    $obj = new RedirectUrl("http://b.weizhuanlianmeng.com/ddb/?aid=$aid&platform=1&is_app=1&uid=16772838&from=singlemessage&isappinstalled=1");
@@ -529,23 +525,14 @@
 
 		   
 
-		    // $content = curl_get_task_string("http://b.weizhuanlianmeng.com/acc/?callback=$jsonpTime&aid=$aid&uid=16772838",$user_agent,$realurl,$tempTaskIP,$tempTaskIP.".cookie");
-		    // sleep(5);
-		    // if(!query_taskip_cookie($taskipArray[$i])){
+		    $content = curl_get_task_string("http://b.weizhuanlianmeng.com/acc/?callback=$jsonpTime&aid=$aid&uid=16772838",$user_agent,$realurl,$tempTaskIP,$tempTaskIP.".cookie");
+		    sleep(3);
+		 //    // if(!query_taskip_cookie($taskipArray[$i])){
 
 
-		   	// }
-
-			// print_r($content);
-
-			// break;
-
-			echo "1111111111111111111"."<br>";
+		 //   	// }
 
 		}
-
-
-		
 
 	}
 
